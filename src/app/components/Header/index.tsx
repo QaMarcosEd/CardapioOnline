@@ -9,7 +9,7 @@ export default function Header() {
                 {/* Texto que indica o título do cardápio */}
                 <p className="text-lg md:text-1xl font-bold">Cardápio</p>
                 {/* Título principal que destaca o cardápio */}
-                <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-colorPrimary">Conheça o nosso cardápio</h1>
+                <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-colorPrimary">Confira o nosso cardápio</h1>
             </div>
         </header>
     );

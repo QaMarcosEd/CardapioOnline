@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { Product } from "@/dataProducts/productsData";
+import Image from "next/image";
 
+import { FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 // Interface que define as propriedades do componente CategoryItems
 interface CategoryItemsProps {
     selectedCategory: string; // Categoria selecionada
@@ -16,11 +18,13 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
     // Estado para controlar a quantidade de cada produto
     const [productQuantity, setProductQuantity] = useState<{ [productId: number]: number }>({});
 
-    // Função para lidar com o clique em um produto
     const handleProductClick = (productId: number) => {
-        // Altera o ID do produto selecionado com base no clique
-        // Se já estiver selecionado, deseleciona; caso contrário, seleciona
-        setSelectedProductId(productId === selectedProductId ? null : productId);
+        // Verifica se o produto clicado é o mesmo que já está selecionado
+        if (productId === selectedProductId) {
+            return; // Retorna sem fazer nada se for o mesmo produto
+        }
+
+        setSelectedProductId(productId);
 
         // Reseta a quantidade do produto anterior para 1
         setProductQuantity((prevQuantity) => ({
@@ -65,59 +69,79 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
     }, [selectedProductId]);
 
     return (
-        <div className="mt-5">
-            {/* Condição para renderizar produtos ou mensagem de ausência */}
-            {products.length === 0 ? (
-                <p>Nenhum produto disponível nesta categoria.</p>
-            ) : (
-                // Mapeia os produtos e renderiza cada um
-                products.map((product) => {
-                    // Obtém a quantidade do produto ou assume 1 como padrão
-                    const quantity = productQuantity[product.id] || 1;
+        <div className="mt-5 flex justify-center">
+            <div className="max-w-screen-lg w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {products.length === 0 ? (
+                        <p>Nenhum produto disponível nesta categoria.</p>
+                    ) : (
+                        products.map((product) => {
+                            const quantity = productQuantity[product.id] || 1;
+                            const totalPrice = product.preco * quantity;
 
-                    // Calcula o preço total do produto multiplicado pela quantidade
-                    const totalPrice = product.preco * quantity;
-
-                    return (
-                        <div
-                            key={product.id}
-                            // Aplica classes de estilo condicional com base no produto selecionado
-                            className={`p-4 border rounded-md shadow-md mb-4 w-full flex items-center justify-between cursor-pointer ${selectedProductId === product.id ? "bg-colorPrimary text-white" : "bg-white"
-                                }`}
-                            // Lidar com o clique no produto
-                            onClick={() => handleProductClick(product.id)}
-                        >
-                            <div>
-                                <h3 className="font-semibold">{product.nome}</h3>
-                                <p>Preço: R$ {totalPrice.toFixed(2)}</p>
-                                <p>Quantidade: {quantity}</p>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                {/* Botões de adicionar/remover do carrinho */}
-                                <button
-                                    className="text-black"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        decreaseQuantity(product.id);
-                                    }}
+                            return (
+                                <div
+                                    key={product.id}
+                                    className={`p-4 border rounded-md shadow-md flex flex-col items-center cursor-pointer ${selectedProductId === product.id ? "bg-colorPrimary text-white" : "bg-white"
+                                        }`}
+                                    onClick={() => handleProductClick(product.id)}
                                 >
-                                    -
-                                </button>
-                                <span>{quantity}</span>
-                                <button
-                                    className="text-black"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        increaseQuantity(product.id);
-                                    }}
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })
-            )}
+                                    <div className="h-36 w-52 relative rounded-md overflow-hidden">
+                                        <Image
+                                            src={product.image}
+                                            alt="Imagem do produto"
+                                            layout="fill"
+                                            objectFit="cover"
+                                            objectPosition="center"
+                                        />
+                                    </div>
+                                    <div className="text-center mt-2">
+                                        <h3 className="font-semibold">{product.nome}</h3>
+                                        <p>Preço: R$ {totalPrice.toFixed(2)}</p>
+                                    </div>
+                                    <div className="flex flex-col items-center space-x-2 mt-2">
+                                        <div className="flex items-center space-x-2 mb-2">
+                                            <button
+                                                className={`${selectedProductId === product.id ? "text-white" : "text-black"
+                                                    }`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    decreaseQuantity(product.id);
+                                                }}
+                                            >
+                                                <FiMinusCircle />
+                                            </button>
+                                            <span>{quantity}</span>
+                                            <button
+                                                className={`${selectedProductId === product.id ? "text-white" : "text-black"
+                                                    }`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    increaseQuantity(product.id);
+                                                }}
+                                            >
+                                                <FiPlusCircle />
+                                            </button>
+                                        </div>
+                                        <button
+                                            className={`${selectedProductId === product.id
+                                                ? "bg-white text-colorPrimary"
+                                                : "bg-colorPrimary text-white"
+                                                } px-2 py-1 rounded-md shadow-lg`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                // Adicione a lógica para adicionar ao carrinho aqui
+                                            }}
+                                        >
+                                            Adicionar ao Carrinho
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
