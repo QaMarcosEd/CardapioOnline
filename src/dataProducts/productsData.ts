@@ -36,7 +36,5 @@ export const productsByCategory: ProductsByCategory = {
         { id: 6, nome: "Fanta Uva 1l", preco: 18.0, quantity: 1, image: "" },
     ],
     "🍨 Sobremesas": [
-
     ],
-    // Adicione mais categorias e produtos conforme necessário
 };
