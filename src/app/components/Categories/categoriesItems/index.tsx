@@ -1,15 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Product } from "@/dataProducts/productsData";
-import Image from "next/image";
+import React, { useEffect, useState } from "react"; // Importando o React e os Hooks de estado e efeito
+import { FiPlusCircle, FiMinusCircle } from "react-icons/fi"; // Importando ícones do pacote react-icons
+import { BsMinecart } from "react-icons/bs"; // Importando ícones do pacote react-icons
+import { Product } from "@/dataProducts/productsData"; // Importando a interface de Produto definida em um arquivo externo
+import Image from "next/image"; // Importando o componente Image do pacote next/image
+import Cart from "../../Cart"; // Importando o componente Cart definido em um arquivo externo
+import { ToastContainer, toast } from "react-toastify"; // Importando componentes relacionados a notificações
+import "react-toastify/dist/ReactToastify.css"; // Importando estilos para as notificações
 
-import { FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 // Interface que define as propriedades do componente CategoryItems
 interface CategoryItemsProps {
-    selectedCategory: string; // Categoria selecionada
-    products: Product[]; // Lista de produtos a serem renderizados
+    selectedCategory: string; // Propriedade para armazenar a categoria selecionada
+    products: Product[]; // Propriedade para armazenar a lista de produtos a serem renderizados
 }
+
 
 // Componente CategoryItems: Renderiza os produtos de uma categoria selecionada
 export default function CategoryItems({ selectedCategory, products }: CategoryItemsProps) {
@@ -17,9 +22,13 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
     // Estado para controlar a quantidade de cada produto
     const [productQuantity, setProductQuantity] = useState<{ [productId: number]: number }>({});
+    // Estado para armazenar os itens do carrinho
+    const [cartItems, setCartItems] = useState<Product[]>([]);
+    // Estado para controlar se o modal do carrinho está aberto ou fechado
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
+    // Função para tratar o clique em um produto
     const handleProductClick = (productId: number) => {
-        // Verifica se o produto clicado é o mesmo que já está selecionado
         if (productId === selectedProductId) {
             return; // Retorna sem fazer nada se for o mesmo produto
         }
@@ -35,7 +44,6 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
 
     // Função para aumentar a quantidade de um produto
     const increaseQuantity = (productId: number) => {
-        // Seleciona automaticamente o produto
         setSelectedProductId(productId);
 
         // Incrementa a quantidade do produto, se existir; caso contrário, começa em 1
@@ -47,7 +55,6 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
 
     // Função para diminuir a quantidade de um produto
     const decreaseQuantity = (productId: number) => {
-        // Seleciona automaticamente o produto
         setSelectedProductId(productId);
 
         // Decrementa a quantidade do produto, com o mínimo de 0
@@ -55,6 +62,34 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
             ...prevQuantity,
             [productId]: Math.max((prevQuantity[productId] || 0) - 1, 0),
         }));
+    };
+
+    // Função para adicionar um produto ao carrinho
+    const addToCart = (product: Product) => {
+        setCartItems((prevItems) => [...prevItems, product]);
+
+        // Exibe uma notificação de sucesso
+        toast.success(`${product.nome} foi adicionado ao carrinho!`, {
+            position: "top-right",
+            autoClose: 3000, // Tempo em milissegundos (3 segundos neste caso)
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    // Função para abrir ou fechar o carrinho
+    const toggleCart = () => {
+        setIsCartOpen((prev) => !prev);
+    };
+
+    // Função para remover um item do carrinho
+    const removeCartItem = (index: number) => {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.splice(index, 1);
+        setCartItems(updatedCartItems);
     };
 
     // Efeito que reajusta a quantidade ao selecionar um novo produto
@@ -130,7 +165,7 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
                                                 } px-2 py-1 rounded-md shadow-lg`}
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                // Adicione a lógica para adicionar ao carrinho aqui
+                                                addToCart(product);
                                             }}
                                         >
                                             Adicionar ao Carrinho
@@ -142,6 +177,18 @@ export default function CategoryItems({ selectedCategory, products }: CategoryIt
                     )}
                 </div>
             </div>
+            <button className="fixed bottom-5 right-5 bg-colorPrimary text-white p-4 rounded-full shadow-lg" onClick={toggleCart}>
+                <BsMinecart size={23} />
+            </button>
+            {isCartOpen && (
+                // Renderiza o componente Cart somente se isCartOpen for verdadeiro
+                <Cart
+                    cartItems={cartItems} // Passa a lista de itens do carrinho para o componente Cart
+                    onClose={() => setIsCartOpen(false)} // Passa uma função para fechar o carrinho
+                    removeItem={removeCartItem} // Passa a função para remover um item do carrinho
+                />
+            )}
+            <ToastContainer />
         </div>
     );
 }
