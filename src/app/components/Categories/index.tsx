@@ -34,7 +34,7 @@ export default function Categories() {
                     ))}
                 </div>
                 {/* Renderiza o componente CategoryItems com a categoria selecionada e produtos correspondentes */}
-                <CategoryItems selectedCategory={selectedCategory} products={selectedProducts} />
+                <CategoryItems selectedCategory={selectedCategory} />
             </div>
         </div>
     );
