@@ -1,34 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+ # Cardapio Online 📝  
+  A aplicação que desenvolvi ao longo deste chat é um sistema de pedidos de produtos em uma loja virtual. A aplicação é baseada no framework Next.js e utiliza a biblioteca Tailwind CSS para estilização. Aqui estão os principais componentes e funcionalidades:
 
-## Getting Started
+## Página Inicial 
+- A aplicação possui uma página inicial que exibe uma lista de categorias de produtos. Ao clicar em uma categoria, a lista de produtos correspondente é exibida.
 
-First, run the development server:
+## Componente de Categorias (Categories)
+- Este componente é responsável por exibir a lista de categorias de produtos disponíveis. Ele renderiza os botões correspondentes a cada categoria e, ao clicar em uma categoria específica, exibe os produtos relacionados usando o componente "CategoryItems". Através deste componente, os usuários podem navegar entre diferentes categorias e explorar os produtos oferecidos pela loja.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Componente de Itens da Categoria (CategoryItems)
+- Este componente renderiza a lista de produtos para a categoria selecionada. Ele exibe informações sobre cada produto, como nome, preço, quantidade disponível e uma imagem. Os usuários podem adicionar produtos ao carrinho ao clicar em um botão "Adicionar ao Carrinho". Também é possível selecionar o número de fatias de produtos que deseja.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Componente de Carrinho (Cart)
+- Quando os produtos são adicionados ao carrinho, o componente de carrinho exibe os itens selecionados. Cada item no carrinho é exibido com detalhes como nome, quantidade e preço total. Os usuários podem remover itens do carrinho. Se o carrinho estiver vazio, é exibida uma imagem indicando que o carrinho está vazio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Botão para Enviar Pedido via WhatsApp
+- Quando há itens no carrinho, um botão "Enviar Pedido via WhatsApp" é exibido. Ao clicar neste botão, o texto do pedido é gerado com base nos produtos no carrinho e exibido em uma área de texto.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Responsividade
+- Implementei estilos e layout responsivos usando o Tailwind CSS, permitindo que a aplicação seja visualizada em diferentes tamanhos de tela. O componente de carrinho também é responsivo e se adapta a diferentes dispositivos.
 
-## Learn More
+## Comunicação entre Componentes
+- Usamos props para passar dados entre os componentes, permitindo que a informação flua de maneira organizada e precisa.
 
-To learn more about Next.js, take a look at the following resources:
+## Funcionalidades de Estado:
+- Utilizei hooks de estado (useState) para gerenciar o estado dos componentes, como produtos selecionados, itens no carrinho e se o carrinho está aberto ou fechado.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Toast de Notificação:
+-  Implementei notificações de sucesso usando a biblioteca react-toastify para fornecer feedback visual ao usuário quando um produto é adicionado ao carrinho
