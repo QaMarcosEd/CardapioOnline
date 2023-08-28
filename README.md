@@ -27,3 +27,5 @@
 
 ## Toast de Notificação:
 -  Implementei notificações de sucesso usando a biblioteca react-toastify para fornecer feedback visual ao usuário quando um produto é adicionado ao carrinho
+
+<img src="./banner/bannerCardapio.png">
