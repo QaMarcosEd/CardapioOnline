@@ -31,7 +31,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, onClose, removeItem }) => {
     const sendOrderViaWhatsApp = () => {
         const orderText = generateOrderText(cartItems);
 
-        const phoneNumber = "77999012242";
+        const phoneNumber = "";
         const encodedMessage = encodeURIComponent(orderText);
         const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
 
